@@ -46,6 +46,7 @@ public class ReactAppLifecycleFacade implements AppLifecycleFacade {
         if (mReactContext == null) {
             return false;
         }
+
         return mReactContext.hasActiveCatalystInstance();
     }
 

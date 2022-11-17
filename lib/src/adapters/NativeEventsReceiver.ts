@@ -8,7 +8,7 @@ import { NotificationFactory } from '../DTO/NotificationFactory';
 
 export class NativeEventsReceiver {
   private emitter: EventEmitter;
-  constructor(private readonly notificationFactory: NotificationFactory = new NotificationFactory()) {
+  constructor(private readonly notificationFactory: NotificationFactory) {
     this.emitter = new NativeEventEmitter(NativeModules.RNEventEmitter);
   }
 
@@ -16,22 +16,18 @@ export class NativeEventsReceiver {
     return this.emitter.addListener('remoteNotificationsRegistered', callback);
   }
 
-  public appNotificationSettingsLinked(callback: () => void): EmitterSubscription {
-    return this.emitter.addListener('appNotificationSettingsLinked', callback);
-  }
-
   public registerPushKitRegistered(callback: (event: RegisteredPushKit) => void): EmitterSubscription {
     return this.emitter.addListener('pushKitRegistered', callback);
   }
 
   public registerNotificationReceived(callback: (notification: Notification) => void): EmitterSubscription {
-    return this.emitter.addListener('notificationReceived', (payload: unknown) => {
+    return this.emitter.addListener('notificationReceived', (payload) => {
       callback(this.notificationFactory.fromPayload(payload));
     });
   }
 
   public registerNotificationReceivedBackground(callback: (notification: Notification) => void): EmitterSubscription {
-    return this.emitter.addListener('notificationReceivedBackground', (payload: unknown) => {
+    return this.emitter.addListener('notificationReceivedBackground', (payload) => {
       callback(this.notificationFactory.fromPayload(payload));
     });
   }
@@ -49,9 +45,5 @@ export class NativeEventsReceiver {
 
   public registerRemoteNotificationsRegistrationFailed(callback: (event: RegistrationError) => void): EmitterSubscription {
     return this.emitter.addListener('remoteNotificationsRegistrationFailed', callback);
-  }
-
-  public registerRemoteNotificationsRegistrationDenied(callback: () => void): EmitterSubscription {
-    return this.emitter.addListener('remoteNotificationsRegistrationDenied', callback);
   }
 }

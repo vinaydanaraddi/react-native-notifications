@@ -4,7 +4,6 @@ import { NotificationCategory } from './interfaces/NotificationCategory';
 import { NotificationChannel } from './interfaces/NotificationChannel';
 import { NotificationsIOS } from './NotificationsIOS';
 import { NotificationsAndroid } from './NotificationsAndroid';
-import { NotificationPermissionOptions } from './interfaces/NotificationPermissions';
 export declare class NotificationsRoot {
     readonly _ios: NotificationsIOS;
     readonly _android: NotificationsAndroid;
@@ -20,11 +19,11 @@ export declare class NotificationsRoot {
     /**
      * registerRemoteNotifications
      */
-    registerRemoteNotifications(options?: NotificationPermissionOptions): void;
+    registerRemoteNotifications(): void;
     /**
      * postLocalNotification
      */
-    postLocalNotification(notification: Notification, id?: number): number;
+    postLocalNotification(notification: Notification, id: number): number;
     /**
      * getInitialNotification
      */
@@ -36,7 +35,7 @@ export declare class NotificationsRoot {
     /**
      * cancelLocalNotification
     */
-    cancelLocalNotification(notificationId: number): void;
+    cancelLocalNotification(notificationId: string): void;
     /**
      * removeAllDeliveredNotifications
      */

@@ -16,10 +16,9 @@ let localNotification = Notifications.postLocalNotification({
 	body: "Local notification!",
 	title: "Local Notification Title",
 	sound: "chime.aiff",
-	silent: false,
+    silent: false,
 	category: "SOME_CATEGORY",
-	userInfo: { },
-	fireDate: new Date(),
+	userInfo: { }
 });
 ```
 
@@ -46,8 +45,7 @@ let someLocalNotification = Notifications.postLocalNotification({
 	title: "Local Notification Title",
 	sound: "chime.aiff",
 	category: "SOME_CATEGORY",
-	userInfo: { },
-	fireDate: new Date(),
+	userInfo: { }
 });
 
 Notifications.cancelLocalNotification(someLocalNotification);
@@ -74,9 +72,9 @@ Call `removeAllDeliveredNotifications()` to dismiss all delivered notifications
 notifications).
 
 
-<img src="./../../static/img/Android_icon-icons.com_66772.png"/> Android
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/APK_format_icon.png/768px-APK_format_icon.png" width={30}/> Android
 
-Much like on iOS, notifications can be triggered locally. The API to do so is a simplified version of the iOS equivalent that works more naturally with the Android perception of push (remote) notifications:
+Much like on iOS, notifications can be triggered locally. The API to do so is a simplified version of the iOS equivalent that works more natually with the Android perception of push (remote) notifications:
 
 ```jsx
 Notifications.postLocalNotification({
@@ -86,4 +84,4 @@ Notifications.postLocalNotification({
 });
 ```
 
-Upon notification opening (tapping by the device user), all data fields will be delivered as-is. Note that scheduled notifications are not yet implemented on Android. See [Issue 484](https://github.com/wix/react-native-notifications/issues/484).
+Upon notification opening (tapping by the device user), all data fields will be delivered as-is). Note that scheduled notifications are not yet implemented on Android. See [Issue 484](https://github.com/wix/react-native-notifications/issues/484).

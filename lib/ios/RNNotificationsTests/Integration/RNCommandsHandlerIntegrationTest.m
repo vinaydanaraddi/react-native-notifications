@@ -34,32 +34,7 @@
     [[_notificationCenter expect] getNotificationSettingsWithCompletionHandler:[OCMArg invokeBlockWithArgs:settings, nil]];
     [[(id)[UIApplication sharedApplication] expect] registerForRemoteNotifications];
     
-    [_uut requestPermissions:@{}];
-    [_notificationCenter verify];
-}
-
-- (void)testRequestPermissions_userAuthorizedPermissionsExtraOptions {
-    UNAuthorizationOptions authOptions = (UNAuthorizationOptionBadge |
-                                          UNAuthorizationOptionSound |
-                                          UNAuthorizationOptionAlert |
-                                          UNAuthorizationOptionAnnouncement |
-                                          UNAuthorizationOptionProvidesAppNotificationSettings |
-                                          UNAuthorizationOptionCriticalAlert |
-                                          UNAuthorizationOptionProvisional |
-                                          UNAuthorizationOptionCarPlay);
-    
-    UNNotificationSettings* settings = [UNNotificationSettings new];
-    [settings setValue:@(UNAuthorizationStatusAuthorized) forKey:@"authorizationStatus"];
-
-    [[_notificationCenter expect] requestAuthorizationWithOptions:authOptions completionHandler:[OCMArg invokeBlockWithArgs:@(YES), [NSNull null], nil]];
-    [[_notificationCenter expect] getNotificationSettingsWithCompletionHandler:[OCMArg invokeBlockWithArgs:settings, nil]];
-    [[(id)[UIApplication sharedApplication] expect] registerForRemoteNotifications];
-    
-    [_uut requestPermissions:@{@"carPlay": @YES,
-                               @"criticalAlert": @YES,
-                               @"providesAppNotificationSettings": @YES,
-                               @"announcement": @YES,
-                               @"provisional": @YES}];
+    [_uut requestPermissions];
     [_notificationCenter verify];
 }
 
@@ -72,7 +47,7 @@
     [[_notificationCenter expect] getNotificationSettingsWithCompletionHandler:[OCMArg invokeBlockWithArgs:settings, nil]];
     [[(id)[UIApplication sharedApplication] reject] registerForRemoteNotifications];
     
-    [_uut requestPermissions:@{}];
+    [_uut requestPermissions];
     [_notificationCenter verify];
 }
 

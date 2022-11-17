@@ -13,16 +13,14 @@ export interface NotificationTextInput {
   placeholder: string;
 }
 
-export type ActivationMode = 'background' | 'foreground' | 'authenticationRequired' | 'destructive';
-
 export class NotificationAction {
   identifier: string;
-  activationMode: ActivationMode;
+  activationMode: 'background' | 'foreground' | 'authenticationRequired' | 'destructive';
   title: string;
   authenticationRequired: boolean;
   textInput?: NotificationTextInput;
 
-  constructor(identifier: string, activationMode: ActivationMode, title: string, authenticationRequired: boolean, textInput?: NotificationTextInput) {
+  constructor(identifier: string, activationMode: 'foreground' | 'authenticationRequired' | 'destructive', title: string, authenticationRequired: boolean, textInput?: NotificationTextInput) {
     this.identifier = identifier;
     this.activationMode = activationMode;
     this.title = title;

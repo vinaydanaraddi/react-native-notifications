@@ -88,10 +88,8 @@ public class RNNotificationsModule extends ReactContextBaseJavaModule implements
                 return;
             }
 
-            result = Arguments.fromBundle(notification.asBundle());
             InitialNotificationHolder.getInstance().clear();
-        } catch (NullPointerException e) {
-            Log.e(LOGTAG, "getInitialNotification: Null pointer exception");
+            result = Arguments.fromBundle(notification.asBundle());
         } finally {
             promise.resolve(result);
         }

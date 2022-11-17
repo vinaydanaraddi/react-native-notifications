@@ -18,20 +18,12 @@ public class PushNotificationProps {
         return getBundleStringFirstNotNull("gcm.notification.body", "body");
     }
 
-    public String getChannelId() {
-        return getBundleStringFirstNotNull("gcm.notification.android_channel_id", "android_channel_id");
-    }
-
     public Bundle asBundle() {
         return (Bundle) mBundle.clone();
     }
 
     public boolean isFirebaseBackgroundPayload() {
         return mBundle.containsKey("google.message_id");
-    }
-
-    public boolean isDataOnlyPushNotification() {
-        return getTitle() == null && getBody() == null;
     }
 
     @Override

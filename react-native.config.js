@@ -9,12 +9,4 @@ module.exports = {
     },
     assets: []
   },
-  project: {
-    ios: {
-      project: './example/ios/NotificationsExampleApp.xcworkspace',
-    },
-    android: {
-      sourceDir: './example/android/',
-    },
-  },
 };

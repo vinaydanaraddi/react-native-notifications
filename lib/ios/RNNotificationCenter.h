@@ -10,7 +10,7 @@ typedef void (^RCTPromiseRejectBlock)(NSString *code, NSString *message, NSError
 
 - (void)isRegisteredForRemoteNotifications:(RCTPromiseResolveBlock)resolve;
 
-- (void)requestPermissions:(NSDictionary *)options;
+- (void)requestPermissions;
 
 - (void)setCategories:(NSArray *)json;
 

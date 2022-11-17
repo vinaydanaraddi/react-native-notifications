@@ -5,7 +5,7 @@
 
 - (instancetype)init;
 
-- (void)requestPermissions:(NSDictionary *)options;
+- (void)requestPermissions;
 
 - (void)setCategories:(NSArray *)categories;
 

@@ -17,6 +17,7 @@ import com.wix.reactnativenotifications.core.AppLifecycleFacadeHolder;
 import com.wix.reactnativenotifications.core.InitialNotificationHolder;
 import com.wix.reactnativenotifications.core.JsIOHelper;
 import com.wix.reactnativenotifications.core.NotificationIntentAdapter;
+import com.wix.reactnativenotifications.core.ProxyService;
 
 import static com.wix.reactnativenotifications.Defs.NOTIFICATION_OPENED_EVENT_NAME;
 import static com.wix.reactnativenotifications.Defs.NOTIFICATION_RECEIVED_EVENT_NAME;
@@ -40,8 +41,6 @@ public class PushNotification implements IPushNotification {
         public void onAppNotVisible() {
         }
     };
-    final private String DEFAULT_CHANNEL_ID = "channel_01";
-    final private String DEFAULT_CHANNEL_NAME = "Channel Name";
 
     public static IPushNotification get(Context context, Bundle bundle) {
         Context appContext = context.getApplicationContext();
@@ -57,7 +56,6 @@ public class PushNotification implements IPushNotification {
         mAppLaunchHelper = appLaunchHelper;
         mJsIOHelper = JsIOHelper;
         mNotificationProps = createProps(bundle);
-        initDefaultChannel(context);
     }
 
     @Override
@@ -86,10 +84,7 @@ public class PushNotification implements IPushNotification {
     }
 
     protected int postNotification(Integer notificationId) {
-        if (mNotificationProps.isDataOnlyPushNotification()) {
-            return -1;
-        }
-        final PendingIntent pendingIntent = NotificationIntentAdapter.createPendingNotificationIntent(mContext, mNotificationProps);;
+        final PendingIntent pendingIntent = getCTAPendingIntent();
         final Notification notification = buildNotification(pendingIntent);
         return postNotification(notification, notificationId);
     }
@@ -139,11 +134,20 @@ public class PushNotification implements IPushNotification {
         return mAppVisibilityListener;
     }
 
+    protected PendingIntent getCTAPendingIntent() {
+        final Intent cta = new Intent(mContext, ProxyService.class);
+        return NotificationIntentAdapter.createPendingNotificationIntent(mContext, cta, mNotificationProps);
+    }
+
     protected Notification buildNotification(PendingIntent intent) {
         return getNotificationBuilder(intent).build();
     }
 
     protected Notification.Builder getNotificationBuilder(PendingIntent intent) {
+
+        String CHANNEL_ID = "channel_01";
+        String CHANNEL_NAME = "Channel Name";
+
         final Notification.Builder notification = new Notification.Builder(mContext)
                 .setContentTitle(mNotificationProps.getTitle())
                 .setContentText(mNotificationProps.getBody())
@@ -154,10 +158,12 @@ public class PushNotification implements IPushNotification {
         setUpIcon(notification);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT);
             final NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            String channelId = mNotificationProps.getChannelId();
-            NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
-            notification.setChannelId(channel != null ? channelId : DEFAULT_CHANNEL_ID);
+            notificationManager.createNotificationChannel(channel);
+            notification.setChannelId(CHANNEL_ID);
         }
 
         return notification;
@@ -176,7 +182,7 @@ public class PushNotification implements IPushNotification {
 
     private void setUpIconColor(Notification.Builder notification) {
         int colorResID = getAppResourceId("colorAccent", "color");
-        if (colorResID != 0) {
+        if (colorResID != 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = mContext.getResources().getColor(colorResID);
             notification.setColor(color);
         }
@@ -213,27 +219,11 @@ public class PushNotification implements IPushNotification {
     }
 
     protected void launchOrResumeApp() {
-        if (NotificationIntentAdapter.canHandleTrampolineActivity(mContext)) {
-            final Intent intent = mAppLaunchHelper.getLaunchIntent(mContext);
-            mContext.startActivity(intent);
-        }
+        final Intent intent = mAppLaunchHelper.getLaunchIntent(mContext);
+        mContext.startActivity(intent);
     }
 
     private int getAppResourceId(String resName, String resType) {
         return mContext.getResources().getIdentifier(resName, resType, mContext.getPackageName());
-    }
-
-    private void initDefaultChannel(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager.getNotificationChannels().size() == 0) {
-                NotificationChannel defaultChannel = new NotificationChannel(
-                    DEFAULT_CHANNEL_ID,
-                    DEFAULT_CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
-                );
-                notificationManager.createNotificationChannel(defaultChannel);
-            }
-        }
     }
 }

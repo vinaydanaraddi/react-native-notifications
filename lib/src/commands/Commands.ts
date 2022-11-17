@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { NativeCommandsSender } from '../adapters/NativeCommandsSender';
 import { Notification } from '../DTO/Notification';
 import { NotificationCategory } from '../interfaces/NotificationCategory';
@@ -5,7 +6,6 @@ import { NotificationChannel } from '../interfaces/NotificationChannel';
 import { NotificationPermissions } from '../interfaces/NotificationPermissions';
 import { UniqueIdProvider } from '../adapters/UniqueIdProvider';
 import { NotificationFactory } from '../DTO/NotificationFactory';
-import { NotificationPermissionOptions } from '../interfaces/NotificationPermissions';
 
 export class Commands {
   constructor(
@@ -30,8 +30,8 @@ export class Commands {
     });
   }
 
-  public requestPermissions(options?: NotificationPermissionOptions) {
-    const result = this.nativeCommandsSender.requestPermissions(options);
+  public requestPermissions() {
+    const result = this.nativeCommandsSender.requestPermissions();
     return result;
   }
 
@@ -56,7 +56,7 @@ export class Commands {
     this.nativeCommandsSender.setBadgeCount(count);
   }
 
-  public cancelLocalNotification(notificationId: number) {
+  public cancelLocalNotification(notificationId: string) {
     this.nativeCommandsSender.cancelLocalNotification(notificationId);
   }
 

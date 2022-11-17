@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { mock, verify, instance, when, anyNumber } from 'ts-mockito';
 
 import { Commands } from './Commands';
@@ -65,15 +66,8 @@ describe('Commands', () => {
 
   describe('requestPermissions', () => {
     it('sends to native', () => {
-      const opts = {};
-      uut.requestPermissions(opts);
-      verify(mockedNativeCommandsSender.requestPermissions(opts)).called();
-    });
-
-    it('sends to native with options', () => {
-      const opts = { criticalAlert: true };
-      uut.requestPermissions(opts);
-      verify(mockedNativeCommandsSender.requestPermissions(opts)).called();
+      uut.requestPermissions();
+      verify(mockedNativeCommandsSender.requestPermissions()).called();
     });
   });
 
@@ -150,9 +144,8 @@ describe('Commands', () => {
 
   describe('cancelLocalNotification', () => {
     it('sends to native', () => {
-      const notificationId = 1;
-      uut.cancelLocalNotification(notificationId);
-      verify(mockedNativeCommandsSender.cancelLocalNotification(notificationId)).called();
+      uut.cancelLocalNotification("notificationId");
+      verify(mockedNativeCommandsSender.cancelLocalNotification("notificationId")).called();
     });
   });
 
@@ -194,18 +187,7 @@ describe('Commands', () => {
     });
 
     it('return negative response from native', async () => {
-      const expectedPermissions: NotificationPermissions = {
-        badge: false,
-        alert: true,
-        sound: false,
-        carPlay: false,
-        criticalAlert: false,
-        providesAppNotificationSettings: false,
-        provisional: false,
-        announcement: false,
-        notificationCenter: true,
-        lockScreen: false,
-      };
+      const expectedPermissions: NotificationPermissions = {badge: false, alert: true, sound: false};
       when(mockedNativeCommandsSender.checkPermissions()).thenResolve(
         expectedPermissions
       );

@@ -8,5 +8,4 @@ export declare class EventsRegistryIOS {
     constructor(nativeEventsReceiver: NativeEventsReceiver, completionCallbackWrapper: CompletionCallbackWrapper);
     registerPushKitRegistered(callback: (event: RegisteredPushKit) => void): EmitterSubscription;
     registerPushKitNotificationReceived(callback: (event: object, completion: () => void) => void): EmitterSubscription;
-    appNotificationSettingsLinked(callback: () => void): EmitterSubscription;
 }
